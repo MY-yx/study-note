@@ -1,0 +1,39 @@
+body {
+  margin: 0;
+}
+
+div {
+  box-sizing: border-box;
+}
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6,
+p {
+  margin: 0;
+  font-weight: bold;
+}
+
+ul {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+a {
+  text-decoration: none;
+  color: #424242;
+}
+
+img {
+  height: 100%;
+}
+
+input,
+button {
+  outline: none;
+  box-sizing: border-box;
+}

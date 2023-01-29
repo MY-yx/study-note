@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+  <link rel="stylesheet" href="./css/common.css">
+  <link rel="stylesheet" href="./css/index.css">
+</head>
+
+<body>
+  <div class="todo-wrap" data-config='{
+    "plusBtn": "j-plus-btn",
+    "inputArea": "input-wrap",
+    "content": "content",
+    "addBtn": "j-add-item",
+    "list" : "j-list",
+    "itemClass": "item"
+  }'>
+    <div class="list-hd">
+      <h2>TodoList</h2>
+      <a href="javascript:;" class="j-plus-btn fa fa-plus"></a>
+    </div>
+    <div class="input-wrap">
+      <div class="text-input">
+        <input type="text" class="content" />
+      </div>
+      <div class="add-btn">
+        <button class="j-add-item">配置项目</button>
+      </div>
+    </div>
+    <div class="list-wrap">
+      <ul class="j-list"></ul>
+    </div>
+  </div>
+
+  <script src="./js/util.js"></script>
+  <script src="./js/index.js"></script>
+</body>
+
+</html>

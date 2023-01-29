@@ -1,0 +1,34 @@
+/**
+  reset.css
+  normalize.css
+  common.css
+  标签样式初始化文件命名规范
+*/
+
+body {
+  /** 浏览器默认的margin是8px */
+  margin: 0;
+}
+
+div {
+  box-sizing: border-box;
+}
+
+h1, h2, h3, h4, h5, h6, p {
+  margin: 0;
+  font-weight: normal;
+}
+
+ul {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+a {
+  text-decoration: none;
+}
+
+img {
+  height: 100%;
+}

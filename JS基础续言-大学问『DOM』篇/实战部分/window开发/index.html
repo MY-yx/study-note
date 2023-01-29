@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+  <link rel="stylesheet" href="./css/normalize.css">
+  <link rel="stylesheet" href="./css/main.css">
+</head>
+
+<body>
+  <div class="d-reference wx">
+    <div class="d-logo">
+      <img src="./img/wx.WEBP" alt="微信">
+    </div>
+    <div class="d-title">
+      <span>微信</span>
+    </div>
+  </div>
+
+  <!-- <div class="d-reference wyy">
+    <div class="d-logo">
+      <img src="./img/wyy.WEBP" alt="网易云音乐">
+    </div>
+    <div class="d-title">
+      <span>网易云音乐</span>
+    </div>
+  </div> -->
+
+  <!-- 菜单栏 -->
+  <div class="d-menu">
+    <ul class="list">
+      <li class="list-item">打开(O)</li>
+      <li class="list-item">剪切(T)</li>
+      <li class="list-item item-bd">复制(C)</li>
+      <li class="list-item">删除(D)</li>
+      <li class="list-item">创建快捷方式(S)</li>
+      <li class="list-item item-bd">重命名(M)</li>
+      <li class="list-item">属性(R)</li>
+      <li class="list-item">...(X)</li>
+      <li class="list-item">...(X)</li>
+    </ul>
+  </div>
+
+  <!--文件夹部分-->
+  <div class="work-table">
+    <div class="wt-header">
+      <span>当前窗口</span>
+    </div>
+    <div class="wt-contain"></div>
+  </div>
+
+  <script src="./js/util.js"></script>
+  <!-- <script src="./js/index.js"></script> -->
+  <script src="./js/prototypeVer.js"></script>
+
+  <script>
+    var oApp = document.getElementsByClassName('d-reference wx')[0],
+      menu = document.getElementsByClassName('d-menu')[0];
+
+    // oApp.dragNclick(menu, function () {
+    //   alert('被点击了, 即将跳转');
+    // })
+    new DragNclick({
+      app: oApp,
+      menu: menu,
+      fn: function() {
+        alert('被点击了')
+      }
+    }).init()
+  </script>
+</body>
+
+</html>

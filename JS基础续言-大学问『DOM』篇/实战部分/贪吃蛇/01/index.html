@@ -1,0 +1,286 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+  <style type="text/css">
+    .wrap {
+      position: relative;
+      width: 500px;
+      height: 500px;
+      margin: 50px auto;
+      background-color: #000;
+      overflow: hidden;
+    }
+
+    .round {
+      display: block;
+      position: absolute;
+      width: 20px;
+      height: 20px;
+      border-radius: 50%;
+      background-color: green;
+    }
+
+    .round.head {
+      background-color: red;
+    }
+
+    .food {
+      display: block;
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 20px;
+      height: 20px;
+      background-color: red;
+      border-radius: 50%;
+    }
+  </style>
+</head>
+
+<body>
+  <div class="wrap"></div>
+
+  <script src="./js/util.js"></script>
+  <script>
+    // 操作数组
+    // var arr = [
+    //   { x: 0, y: 0 } // 每个圆圈位置的坐标
+    // ]
+
+
+    window.onload = function () {
+      init();
+    }
+
+    function init() {
+      initGame();
+    }
+
+    var initGame = (function () {
+      var wrap = document.getElementsByClassName('wrap')[0],
+        wrapWidth = parseInt(getStyles(wrap, 'width')),
+        wrapHeight = parseInt(getStyles(wrap, 'height')),
+        timer = null;
+      var Snake = function () {
+        this.bodyArr = [
+          { x: 0, y: 0 },
+          { x: 0, y: 20 },
+          { x: 0, y: 40 },
+          { x: 0, y: 60 },
+          { x: 0, y: 80 },
+          { x: 0, y: 100 }
+        ];
+        this.dir = 'DOWN'; // 方向
+        this.foodItem = null;
+      }
+      Snake.prototype = {
+        init: function () {
+          this.bindEvent();
+          this.initSnake();
+          this.createFood();
+          this.run();
+        },
+        bindEvent: function () {
+          var _self = this;
+          addEvent(document, 'keydown', function (e) {
+            _self.changeDir.call(_self, e);
+          });
+        },
+        initSnake: function () { // 绘制
+          var arr = this.bodyArr,
+            len = arr.length,
+            frag = document.createDocumentFragment(),
+            item;
+          for (var i = 0; i < len; i++) {
+            item = arr[i];
+            var round = document.createElement('i'); // 只需要将bodyArr里每一项item的x, y 赋值给top, left就行
+            round.className = i === len - 1 ? 'round head' : 'round';
+            round.style.left = item.x + 'px';
+            round.style.top = item.y + 'px';
+            frag.appendChild(round);
+          }
+          wrap.appendChild(frag);
+        },
+        run: function () {
+          var _self = this;
+          timer = setInterval(function () {
+            // _self.move.call(_self);
+            _self.move(); // 隐式绑定可以拿到_self
+          }, 1000)
+
+        },
+        move: function () {
+          // 坐标依次顺移
+          var arr = this.bodyArr,
+            len = arr.length,
+            head = arr[len - 1];
+
+          for (var i = 0; i < len; i++) {
+            if (i === len - 1) { // 单独处理最后一项
+              // head.y += 20; // 假设往下走
+              this.setHeadXY(head);
+            } else {
+              arr[i].x = arr[i + 1].x;
+              arr[i].y = arr[i + 1].y;
+            }
+          }
+          this.eatFood();
+          this.removeSnake(); // 把当前的全部清除重新绘制
+          this.initSnake();
+          this.headInBody(arr);
+        },
+        headInBody: function (arr) {
+          var headX = arr[arr.length - 1].x,
+            headY = arr[arr.length - 1].y,
+            item,
+            _self = this;
+          for (var i = 0; i < arr.length - 2; i++) {
+            // 排除最后一项
+            item = arr[i];
+            if (headX === item.x && headY === item.y) {
+              // 撞到了
+              clearInterval(timer); // 先不让动了
+              setTimeout(function () {
+                alert('game over');
+                _self.removeSnake(); // 清除蛇
+              }, 500);
+
+            }
+          }
+        },
+        removeSnake: function () {
+          var bodys = document.getElementsByClassName('round');
+          while (bodys.length > 0) {
+            // 每次删除最后一个
+            bodys[0].remove();
+          }
+        },
+        changeDir: function (e) {
+          var e = e || window.event,
+            code = e.keyCode;
+          this.setDIr(code);
+        },
+        setDIr: function (code) {
+          // 游戏规则: 向下是无法再按向上或向下; 向上时无法向上或下; 左右同理
+          switch (code) {
+            case 37:
+              if (this.dir !== 'LEFT' && this.dir !== 'RIGHT') {
+                this.dir = 'LEFT';
+              }
+              break;
+            case 38:
+              if (this.dir !== 'UP' && this.dir !== 'DOWN') {
+                this.dir = 'UP';
+              }
+              break;
+            case 39:
+              if (this.dir !== 'RIGHT' && this.dir !== 'LEFT') {
+                this.dir = 'RIGHT';
+              }
+              break;
+            case 40:
+              if (this.dir !== 'DOWN' && this.dir !== 'UP') {
+                this.dir = 'DOWN';
+              }
+              break;
+          }
+        },
+        setHeadXY: function (head) {
+          switch (this.dir) {
+            case 'LEFT':
+              if (head.x <= 0) {
+                head.x = wrapWidth - 20; // 超过界限时再另一侧出现
+              } else {
+                head.x -= 20;
+              }
+
+              break;
+            case 'RIGHT':
+              if (head.x >= wrapWidth - 20) {
+                head.x = 0;
+              } else {
+                head.x += 20;
+              }
+              break;
+            case 'UP':
+              if (head.y <= 0) {
+                head.y = wrapHeight - 20; // 超过界限时再另一侧出现
+              } else {
+                head.y -= 20;
+              }
+              break;
+            case 'DOWN':
+              if (head.y >= wrapHeight - 20) {
+                head.y = 0;
+              } else {
+                head.y += 20;
+              }
+
+              break;
+          }
+        },
+        eatFood: function () {
+          // 当前头部位置等于食物位置时, 那就相当于吃掉了
+          var food = document.getElementsByClassName('food')[0],
+            round = document.getElementsByClassName('round')[0],
+            bodyWidth = parseInt(getStyles(round, 'width')),
+            bodyHeight = parseInt(getStyles(round, 'height')),
+            arr = this.bodyArr,
+            head = arr[arr.length - 1],
+            arr0 = this.bodyArr[0],
+            arr1 = this.bodyArr[1],
+            x,
+            y;
+          // (1) 先要判断head的位置和food是否重合
+          if (head.x === this.foodItem.x && head.y === this.foodItem.y) {
+            // 先删掉
+            food.remove();
+            // 如果最后两位的x相等
+            if (arr0.x === arr1.x && arr0.y !== arr1.y) {
+              // arr0.Y > arr1.Y ? 'UP' : 'DOWN'
+              x = arr0.x;
+              y = arr0.y > arr1.y ? y + arr0.y + bodyHeight : arr0.y - bodyHeight;
+            }
+            // 最后两位的y相等
+            if (arr0.y === arr1.y && arr0.x !== arr1.x) {
+              // arr0.x > arr1.x ? 'RIGHT' : 'LEFT'
+              x = arr0.x > arr1.x ? arr0.x + bodyWidth : arr0.x - bodyWidth;
+              y = arr0.y;
+            }
+            this.bodyArr.unshift({
+              x, y
+            });
+            this.foodItem = null;
+            this.createFood();
+          }
+        },
+        createFood: function () {
+          // 随机生成坐标
+          var food = document.createElement('food'),
+            foodLeft = this.setRandowPos(wrapWidth) * 20,
+            foodTop = this.setRandowPos(wrapHeight) * 20; // 这里其实可以做一层判断, 如果随机数是在身体上时, 递归一下
+          food.className = 'food';
+          food.style.left = foodLeft + 'px';
+          food.style.top = foodTop + 'px';
+          this.foodItem = ({
+            x: foodLeft,
+            y: foodTop,
+          });
+          wrap.appendChild(food);
+        },
+        setRandowPos(size) {
+          return Math.floor(Math.random() * (size / 20)); //  Math.random() 返回0-1之间的随机数; 需要向下取整
+        }
+      }
+
+      return new Snake().init();
+    });
+  </script>
+</body>
+
+</html>

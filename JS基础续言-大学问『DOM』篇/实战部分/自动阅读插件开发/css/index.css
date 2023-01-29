@@ -1,0 +1,79 @@
+.list-hd {
+  position: fixed;
+  /** 当元素开启了position: fixed; => 内联块元素 需要设置宽度*/
+  width: 100%;
+  /** 一般手机端的高度设置为44px */
+  height: 44px;
+  top: 0;
+  /** background-color 应该在color前被设置 */
+  background-color: orange;
+  color: #fff;
+  line-height: 44px;
+  text-align: center;
+  z-index: 999;
+}
+
+.container {
+  /* 宽度可以不设置，container是个块级元素自己会占满整个屏幕 */
+  /* width: 100%; */
+  margin-top: 44px;
+}
+
+.bk-list .bk-item {
+  position: relative;
+  height: 150px;
+  border-bottom: 1px solid #ddd;
+}
+
+.bk-list .bk-item .item-lk {
+  display: block;
+  height: 100%;
+}
+
+.bk-list .bk-item .bk-pic {
+  position: absolute;
+  top: 0;
+  left: 0;
+  height: 150px;
+  padding: 10px;
+  /* border: 1px solid #000; */
+}
+
+/* 企业级两栏开发逻辑: 左边部分开启绝对定位, 右边部分margin-left左边部分的宽度 */
+.bk-list .bk-item .bk-info {
+  height: 100%;
+  margin-left: 118px;
+  padding: 0 10px;
+  /* border: 1px solid #000; */
+  color: #424242;
+  /* 互联网标准的黑色 */
+}
+
+.bk-list .bk-item .bk-info h2,
+.bk-list .bk-item .bk-info p {
+  margin-top: 15px;
+}
+
+.bk-list .bk-item .bk-info .intro {
+  /* 省略号三大件 */
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  color: #999;
+}
+
+.s-top-btn {
+  display: none;
+  position: fixed;
+  bottom: 25px;
+  right: 15px;
+  width: 60px;
+  height: 60px;
+  background: url(../img/rocket.png) no-repeat 0 0/60px 60px;
+  border-radius: 50%;
+  opacity: .6;
+}
+
+.s-top-btn:hover {
+  opacity: 1;
+}
